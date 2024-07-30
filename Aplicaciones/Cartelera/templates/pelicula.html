@@ -1,0 +1,166 @@
+{% extends "./plantilla.html" %}
+{% load static %}
+
+{% block body %}
+<body>
+    <div class="container">
+        <div class="text-center">
+            <div class="row">
+                <h1>Películas</h1>
+                <div class="col-md-12 text-end">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <i class="fas fa-plus"></i>
+                        <b>Agregar Película</b>
+                    </button>
+                    <button class="btn btn-success" onclick="cargarPelicula();">
+                        <i class="fas fa-refresh"></i> Actualizar
+                    </button>
+                </div>
+                <br>
+                <div class="col-md-12" id="contenedor-pelicula"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Nueva Película</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="frm_nuevo_pelicula" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label for="titulo"><b>Título</b></label>
+                        <input type="text" name="titulo" class="form-control" id="titulo" placeholder="Ingrese un título" required>
+                        <br>
+                        <label for="duracion"><b>Duración</b></label>
+                        <input type="text" name="duracion" class="form-control" id="duracion" placeholder="Ingrese la duración" required>
+                        <br>
+                        <label for="sinopsis"><b>Sinopsis:</b></label>
+                        <input type="text" name="sinopsis" class="form-control" id="sinopsis" placeholder="Ingrese una sinopsis" required>
+                        <br>
+
+                        
+                        <label for="genero"><b>Genero</b></label>
+                        <select name="genero" id="genero" class="form-control">
+                            {% for genero in generos %}
+                                <option value="{{ genero.id }}">{{ genero.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <label for="director"><b>Director</b></label>
+                        <select name="director" id="director" class="form-control">
+                            {% for director in directores %}
+                                <option value="{{ director.id }}">{{ director.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                        <br>
+
+
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Guardar
+                            </button>&nbsp;&nbsp;
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                <i class="fas fa-times"></i>
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br>
+
+    <script>
+        // Validación del formulario con jQuery Validation Plugin
+        $("#frm_nuevo_pelicula").validate({
+            rules: {
+                titulo: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 20
+                },
+                duracion: {
+                    required: true,
+                    minlength: 3,
+                    maxlength: 20
+                },
+                sinopsis: {
+                    required: true,
+                }
+            },
+            messages: {
+                titulo: {
+                    required: "El título es requerido",
+                    minlength: "Ingrese al menos 3 caracteres",
+                    maxlength: "Máximo de 20 caracteres"
+                },
+                duracion: {
+                    required: "Por favor ingrese la duración",
+                    minlength: "Ingrese al menos 3 caracteres",
+                    maxlength: "Máximo de 20 caracteres"
+                },
+                sinopsis: {
+                    required: "Ingrese una sinopsis"
+                }
+            },
+            submitHandler: function(form) {
+                const formData = new FormData(form);
+                fetch("{% url 'guardarPelicula' %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.estado) {
+                        Swal.fire({
+                            title: "Confirmación",
+                            text: data.mensaje,
+                            icon: 'success'
+                        });
+                        $('#exampleModal').modal('hide');
+                        form.reset();
+                        cargarPelicula();
+                    } else {
+                        Swal.fire({
+                            title: "Error",
+                            text: data.mensaje,
+                            icon: 'error'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: "Error",
+                        text: 'Hubo un error al enviar el formulario.',
+                        icon: 'error'
+                    });
+                });
+            }
+        });
+
+        // Función para cargar la lista de películas
+        function cargarPelicula() {
+            document.getElementById('contenedor-pelicula').innerHTML = '<div class="text-center"><span class="spinner-border"></span></div>';
+            fetch('{% url "listaPelicula" %}')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('contenedor-pelicula').innerHTML = html;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Cargar la lista de películas al cargar la página inicialmente
+        cargarPelicula();
+    </script>
+</body>
+{% endblock %}

@@ -1,0 +1,161 @@
+{% extends "./plantilla.html" %}
+{% load static %}
+
+{% block body %}
+<body>
+    <div class="container">
+        <div class="text-center">
+            <div class="row">
+                <h1>Directores</h1>
+                <div class="col-md-12 text-end">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <i class="fas fa-plus"></i>
+                        <b>Agregar Director</b>
+                    </button>      
+                    <button class="btn btn-success" onclick="cargarDirector();">
+                        <i class="fas fa-refresh"></i> Actualizar
+                    </button>
+                </div>
+                <br>
+                <div class="col-md-12" id="contenedor-director"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Nuevo Director</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="#" id="frm_nuevo_director" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        <label for="dni"><b>DNI</b></label>
+                        <input type="text" name="dni" class="form-control" id="dni" placeholder="Ingrese la cedula" required>
+                        <br>
+                        <label for="apellido"><b>Apellido</b></label>
+                        <input type="text" name="apellido" class="form-control" id="apellido" placeholder="Ingrese el apellido" required>
+                        <br>
+                        <label for="nombre"><b>Nombre:</b></label>
+                        <input type="text" name="nombre" class="form-control" id="nombre" placeholder="Ingrese nombre del Genero" required>
+                        <br>
+                        <label for="foto"><b>Fotografía:</b></label>
+                        <input type="file" name="foto" id="foto" accept="image/*" required class="form-control">
+                        <br>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Guardar
+                            </button>&nbsp;&nbsp;
+                            <button type="button" class="btn btn-danger" data-bs-dismiss="modal">
+                                <i class="fas fa-times"></i>
+                                Cancelar
+                            </button> 
+                        </div>
+                    </form>   
+                </div>
+            </div>
+        </div>
+    </div>
+    <br><br>
+
+    <script>
+        $("#frm_nuevo_director").validate({
+            rules: {
+                dni:{
+                    required: true,
+                    digits: true,
+                    maxlength: 10
+                },
+                apellido:{
+                    required: true,
+                    minlength: 3,
+                    maxlength: 20
+                },
+                nombre:{
+                    required: true,
+                    minlength: 3,
+                    maxlength: 20
+                },
+                foto:{
+                    required: true,
+                }
+            },
+            messages:{
+                dni:{
+                    required: "El DNI es requerido",
+                    digits: "Por favor ingrese solo números",
+                    maxlength: "Número máximo de 10 dígitos"
+                },
+                apellido:{
+                    required: "Por favor ingrese el apellido",
+                    minlength: "Ingrese al menos 3 caracteres",
+                    maxlength: "Máximo de 20 caracteres"
+                },
+                nombre:{
+                    required: "Por favor ingrese el nombre",
+                    minlength: "Ingrese al menos 3 caracteres",
+                    maxlength: "Máximo de 20 caracteres"
+                },
+                foto:{
+                    required: "Seleccione la foto"
+                }
+            },
+            submitHandler: function(form) {
+                const formData = new FormData(form);
+
+                fetch("{% url 'guardarDirector' %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.estado) {
+                        Swal.fire({
+                            title: "Confirmación",
+                            text: data.mensaje,
+                            icon: 'success'
+                        });
+                        $('#exampleModal').modal('hide');
+                        form.reset();
+                        cargarDirector();
+                    } else {
+                        Swal.fire({
+                            title: "Error",
+                            text: data.mensaje,
+                            icon: 'error'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: "Error",
+                        text: 'Hubo un error al enviar el formulario.',
+                        icon: 'error'
+                    });
+                });
+            }
+        });
+
+        function cargarDirector() {
+            document.getElementById('contenedor-director').innerHTML = '<div class="text-center"><span class="spinner-border"></span></div>';
+            fetch('{% url "listaDirector" %}')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('contenedor-director').innerHTML = html;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        // Cargar la lista de directores al cargar la página inicialmente
+        cargarDirector();
+    </script>
+</body>
+{% endblock %}
+</html>

@@ -1,0 +1,95 @@
+{% extends "./plantilla.html" %}
+{% block body %}
+<br>
+<div class="card">
+    <div class="card-title text-center">
+        <h3><b>Listado de generos</b></h3> 
+    </div>
+</div>
+<br>
+<div class="text-end">
+    <a href="{% url 'nuevoGenero' %}" class="btn btn-success">Agregar Genero</a>
+</div>
+<table class="table table-bordered table-striped table-hover" id="tbl-generos">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>NOMBRE</th>
+            <th>DESCRIPCION</th>
+            <th>FOTO</th>
+            <th>ACCIONES</th>  
+        </tr>
+    </thead>
+    <tbody>
+        {% for generoTemporal in generos %}
+        <tr>
+            <td>{{generoTemporal.id}}</td>
+            <td>{{generoTemporal.nombre}}</td>
+            <td>{{generoTemporal.descripcion}}</td>
+            <td>
+                {% if generoTemporal.foto %}
+                    <a download href="{{ generoTemporal.foto.url }}" target="_blank">
+                        <img src="{{ generoTemporal.foto.url }}" alt="" width="100px" height="100px">
+                    </a>
+                {% else %}
+                    <p>No hay foto disponible.</p>
+                {% endif %}
+            </td>
+            <td>   
+                <a href="{% url 'editarGenero' generoTemporal.id %}" class="btn btn-warning">Editar</a>
+                <a href="{% url 'eliminarGenero' generoTemporal.id %}" 
+                onclick="return confirm('Esta seguro?')" class="btn btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div style="margin: 50px auto; width: 650px; height: 650px;">
+    <hr>
+    <canvas id="generos"></canvas>
+</div>
+
+<script>
+    let table = new DataTable('#tbl-generos');
+
+    // Obtener los datos del contexto pasado desde la vista
+    const nombres = {{ nombres|safe }};
+    const descripcionesCount = {{ descripciones_count|safe }};
+
+    const ctx = document.getElementById('generos').getContext('2d'); // Obtiene el contexto del canvas donde se dibujará el gráfico.
+    const generos = new Chart(ctx, { // Instancia de Chart.js
+        type: 'bar', // Tipo de gráfico (puede ser line, bar, radar, polarArea, pie, doughnut, bubble)
+        data: {
+            labels: nombres, // Etiquetas para el eje X
+            datasets: [{
+                label: 'Número de Descripciones',
+                data: descripcionesCount, // Datos que se mostrarán en el gráfico
+                backgroundColor: [
+                'red',           
+                'blue',         
+                'yellow',        
+                'green',                  
+                'orange'   
+                ],
+                borderColor: [
+                'red',           
+                'blue',         
+                'yellow',        
+                'green',                  
+                'orange'
+                ],
+                borderWidth: 3
+            }]
+        },
+        options: { // Configura las opciones del gráfico, como el inicio del eje y en cero.
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+{% endblock %}

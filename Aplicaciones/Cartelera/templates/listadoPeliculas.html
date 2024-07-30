@@ -1,0 +1,28 @@
+{% extends "./plantilla.html" %}
+{% block body %}
+    <br>
+    <div class="card">
+        <div class="card-title text-center">
+            <h3><b>Listado de Peliculas</b></h3>
+        </div>
+    </div>
+    <br>
+    <table class="table table-borderd table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titulo</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for peliculasTemporal in peliculas %}
+            <tr>
+                <td>{{peliculasTemporal.id}}</td>
+                <td>{{peliculasTemporal.titulo}}</td>
+                <td></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

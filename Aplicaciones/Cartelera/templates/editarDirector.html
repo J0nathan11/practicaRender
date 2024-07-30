@@ -1,0 +1,34 @@
+{% extends "./plantilla.html" %}
+{% block body %}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <h1>EDITAR DIRECTOR</h1>
+            <form action="{% url 'procesarActualizacionDirector' %}" method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                <input type="hidden" name="id" value="{{directorEditar.id}}">
+                
+                <label for=""><b>DNI:</b></label>
+                <input type="number" name="dni" class="form-control" value="{{directorEditar.dni}}" id="dni" placeholder="Ingrese su Cedula">
+                
+                <label for=""><b>Nombre:</b></label>
+                <input type="text" name="nombre" class="form-control" value="{{directorEditar.nombre}}" id="nombre">
+                
+                <label for=""><b>Apellido:</b></label>
+                <input type="text" name="apellido" class="form-control" value="{{directorEditar.apellido}}" id="apellido">
+                
+                <label for=""><b>Fotografia:</b></label>
+                <input type="file" name="foto" class="form-control" id="foto">
+                
+                <br>
+                <button type="submit" class="btn btn-warning">Actualizar</button>
+                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <a href="{% url 'director' %}" class="btn btn-light">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+<br>
+{% endblock %}

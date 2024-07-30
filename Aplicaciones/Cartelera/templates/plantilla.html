@@ -1,0 +1,104 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--Importando JQuety-->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <!--Importando Bootstrap-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js" integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+" crossorigin="anonymous"></script>
+    <!--Importando Datatable-->
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css"link>
+    <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js"> </script>
+    <!--Importando Sweetalert2-->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!--Importando Jquery Validation-->
+    <script src="{% static 'librerias/jquery-validation/dist/jquery.validate.min.js' %}"></script>
+    <!--Importando font-awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!--Importando FileInput.js -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/css/fileinput.min.css">
+    <script  src="https://cdn.jsdelivr.net/gh/kartik-v/bootstrap-fileinput@5.5.0/js/fileinput.min.js"></script>
+    <!-- importamos cdn-->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <title>CINE UTC</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navdar-dark bg-primary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#"><b class="text text-light">CINEUTC</b></a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link active" aria-current="page" href="/"><b class="text text-light">Inicio</b></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'listadoGeneros' %}"><b class="text text-light" >Generos</b></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'listadoDirectores' %}"><b class="text text-light">Directores</b></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'listadoPaises' %}"><b class="text text-light">Paises</b></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'gestionCines' %}"><b class="text text-light">Gestion Cines</b></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'director' %}"><b class="text text-light">Fetch Director</b></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'pelicula' %}"><b class="text text-light">Fetch Pelicula</b></a>
+              </li>
+            </ul>
+            <form class="d-flex" role="search">
+              <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
+        </div>
+      </nav>
+    {% block body %}  
+    {% endblock %}
+    <div class="row bg-secondary">
+      <div class="col-mb-6 text-aling=center">
+        <br>
+        <center>
+          <b>Desarrollado por</b>
+          <b>Jonathan Oña - &copy;S UTC2024</b>
+        </center>
+        <br>
+      </div>
+    </div>
+    
+    {% if messages %}
+      {% for mensaje in messages %}
+        {% if mensaje.tags == 'success' %}
+          <script>
+            Swal.fire({
+              title: "Confirmacion",
+              text: "{{mensaje}}",
+              icon: "success"
+            });
+          </script>
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+    
+    <style>
+      label.error{
+        color: red;
+      }
+      .form-control.error{
+        border: 1px solid red;
+      }
+    </style>
+    
+</body>
+</html>

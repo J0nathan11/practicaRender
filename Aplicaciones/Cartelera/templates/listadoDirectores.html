@@ -1,0 +1,54 @@
+{% extends "./plantilla.html" %}
+{% block body %}
+    <br>
+    <div class="card">
+        <div class="card-title text-center">
+            <h3><b>Listado de Directores</b></h3>
+        </div>
+    </div>
+    <br>
+    <div class="text-end">
+        <a href="{% url 'nuevoDirector' %}" class="btn btn-success">Agregar Director</a>
+    </div>
+    <table class="table table-borderd table-striped table-hover" id="tbl-directores">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>DNI</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Foto</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for directorTemporal in directores %}
+            <tr>
+                <td>{{ directorTemporal.id }}</td>
+                <td>{{ directorTemporal.dni }}</td>
+                <td>{{ directorTemporal.nombre }}</td>
+                <td>{{ directorTemporal.apellido }}</td>
+                <td>
+                    {% if directorTemporal.foto %}
+                        <a href="{{ directorTemporal.foto.url }}" target="_blank">
+                            <img src="{{ directorTemporal.foto.url }}" height="100px" width="100px">
+                        </a><br>
+                        <a download href="{{directorTemporal.foto.url}}">
+                            Descargar
+                        </a>
+                    {% else %}
+                        No hay foto disponible
+                    {% endif %}
+                </td>
+                <td>   
+                    <a href="{% url 'editarDirector' directorTemporal.id %}" class="btn btn-warning">Editar</a>
+                    <a href="{% url 'eliminarDirector' directorTemporal.id %}" onclick="return confirm('¿Está seguro?')" class="btn btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <script>
+        let table = new DataTable('#tbl-directores');
+    </script>
+{% endblock %}

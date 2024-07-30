@@ -1,0 +1,57 @@
+
+<body>
+    <div class="container">
+        <div class="text-center">
+            <div class="row">
+                <br>
+                <div class="col-md-12">
+                    <br>
+                    <table class="table table-bordered table-striped table-hover" id="tbl-pelicula">
+                        <thead>
+                            <tr>
+                                <th class="text-center">ID</th>
+                                <th class="text-center">TITULO</th>
+                                <th class="text-center">DURACION</th>
+                                <th class="text-center">SINOPSIS</th>
+                                <th class="text-center">ACCIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbl-pelicula-body">
+                            {% for peliculaTemporal in peliculas %}
+                                <tr>
+                                    <td class="text-center">{{ peliculaTemporal.id }}</td>
+                                    <td class="text-center">{{ peliculaTemporal.titulo }}</td>
+                                    <td class="text-center">{{ peliculaTemporal.duracion }}</td>
+                                    <td class="text-center">{{ peliculaTemporal.sinopsis }}</td>
+                                    
+                                    <td class="text-center">
+                                        <a href="#" class="btn btn-outline-warning btn-circle" title="Editar Pelicula">
+                                            <i class="fas fa-pencil"></i>
+                                        </a>
+                                        <a href="#" onclick="return confirm('¿Estás seguro?');" class="btn btn-outline-danger btn-circle" title="Eliminar Peliculas">
+                                            <i class="fas fa-trash"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para cargar la lista de películas
+        function cargarPelicula() {
+            document.getElementById('contenedor-pelicula').innerHTML = '<div class="text-center"><span class="spinner-border"></span></div>';
+            fetch('{% url "listaPelicula" %}')
+                .then(response => response.text())
+                .then(html => {
+                    document.getElementById('contenedor-pelicula').innerHTML = html;
+                })
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+

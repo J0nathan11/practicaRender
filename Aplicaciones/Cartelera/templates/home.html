@@ -1,0 +1,59 @@
+{% extends "./plantilla.html" %}
+{% load static %}
+{% block body %}
+
+<br>
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'img/cine1.jpg' %}" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'img/cine2.jpg' %}" class="d-block w-100" alt="...">
+      </div>
+      <div class="carousel-item">
+        <img src="{% static 'img/cine3.jpg' %}" class="d-block w-100" alt="...">
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<br>
+<div class="container bg-ligth">
+  <div class="row">
+    <div class="col-6 text-center">
+        <h3>Misión</h3>
+        <br>
+        <h6>
+            "Nuestra misión es brindar a nuestros clientes una experiencia cinematográfica inolvidable combinando 
+            las tecnologías de sonido y proyección más avanzadas con un excelente servicio al cliente. Estamos 
+            comprometidos a brindar una selección diversa de películas de alta calidad, desde los últimos estrenos 
+            de Hollywood hasta películas independientes y largometrajes. películas, promoviendo la apreciación del 
+            arte del cine en un ambiente confortable y cálido"
+        </h6>
+    </div>
+    <div class="col-6 text-center">
+        <h3>Visión</h3>
+        <h6>
+            "Convertirnos en un cine líder en la industria del entretenimiento, conocido por su excelente 
+            presentación cinematográfica y satisfacción del cliente. Nos esforzamos por estar en la encrucijada 
+            de la cultura de nuestra comunidad, promover el amor por el cine y promover el crecimiento de la 
+            industria cinematográfica local e internacional". "Nos esforzamos por innovar continuamente, adaptarnos 
+            a nuevas tecnologías y tendencias y brindar siempre la mejor experiencia a nuestros espectadores".
+        </h6>
+      </div>
+    </div>
+  </div>
+<br>
+{% endblock %}
