@@ -19,6 +19,7 @@ def listadoGeneros(request):
         'descripciones_count': list(genero_counts.values()) # Conteo de descripciones por género
     }
     return render(request, 'listadoGeneros.html', context)
+
 #Nuevo Genero formulario
 def nuevoGenero(request):
     return render(request, 'nuevoGenero.html')
